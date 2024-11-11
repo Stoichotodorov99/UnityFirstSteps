@@ -9,10 +9,12 @@ public class Movement : MonoBehaviour
 [SerializeField] float thrustStrength = 100f;
 [SerializeField] float rotationStrength = 100f;
 Rigidbody rb;
+AudioSource audioSource;
 
 private void Start() 
 {
     rb = GetComponent<Rigidbody>();
+    audioSource = GetComponent<AudioSource>();
 }
 private void OnEnable() {
     thrust.Enable();   
@@ -21,16 +23,27 @@ private void OnEnable() {
 
  private void FixedUpdate()
     {
+        
         ProcessThrust();
         ProcessRotation();
     }
 
     private void ProcessThrust()
     {
-        if (thrust.IsPressed())
+        if (thrust.IsPressed() )
         {
             rb.AddRelativeForce(Vector3.up * thrustStrength * Time.fixedDeltaTime);
+            if ( !audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }            
         }
+         else 
+          
+            {
+            audioSource.Stop();
+            }
+      
     }
     private void ProcessRotation()
     {
@@ -47,6 +60,11 @@ private void OnEnable() {
 
     private void ApplyRotation(float rotationThisFrame)
     {
+        rb.freezeRotation = true;
         transform.Rotate(Vector3.forward * rotationThisFrame * Time.fixedDeltaTime);
+        rb.freezeRotation = false; 
+
     }
 }
+
+// audicity
