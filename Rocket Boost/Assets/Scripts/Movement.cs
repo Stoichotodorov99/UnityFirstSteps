@@ -3,7 +3,6 @@ using UnityEngine.InputSystem;
 
 public class Movement : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
 [SerializeField] InputAction thrust;
 [SerializeField] InputAction rotation;
 [SerializeField] float thrustStrength = 100f;
@@ -37,53 +36,85 @@ private void OnEnable() {
     {
         if (thrust.IsPressed() )
         {
-            rb.AddRelativeForce(Vector3.up * thrustStrength * Time.fixedDeltaTime);
-            if ( !audioSource.isPlaying)
-            {
-                audioSource.PlayOneShot(mainEngineSFX);
-            } 
-            if (!mainEngineParticles.isPlaying)
-            {
-            mainEngineParticles.Play();    
-            }       
+            StartThrusting();
         }
-         else 
-          
-            {
-            audioSource.Stop();
-            mainEngineParticles.Stop();
-            }
-      
+        else
+
+        {
+            StopThrusting();
+        }
+
     }
+
+     private void StartThrusting()
+    {
+        rb.AddRelativeForce(Vector3.up * thrustStrength * Time.fixedDeltaTime);
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(mainEngineSFX);
+        }
+        if (!mainEngineParticles.isPlaying)
+        {
+            mainEngineParticles.Play();
+        }
+    }
+
+    private void StopThrusting()
+    {
+        audioSource.Stop();
+        mainEngineParticles.Stop();
+    }
+
+   
+
     private void ProcessRotation()
     {
        float rotationInput =  rotation.ReadValue<float>();
        if (rotationInput < 0)
         {
-            ApplyRotation(rotationStrength);
-
-            if (!rightThrustEngineParticles.isPlaying)
-            {
-                leftThrustEngineParticles.Stop();
-                rightThrustEngineParticles.Play();    
-            }       
+            RotateRight();
         }
         else if (rotationInput > 0)
-       {
-            ApplyRotation(-rotationStrength);
-
-            if (!leftThrustEngineParticles.isPlaying)
-            {
-                rightThrustEngineParticles.Stop();
-                leftThrustEngineParticles.Play();    
-            }    
+        {
+            RotateLeft();
         }
         else
         {
-            leftThrustEngineParticles.Stop();
-            rightThrustEngineParticles.Stop();
+            StopRotating();
         }
     }
+
+    private void RotateRight()
+    {
+        ApplyRotation(rotationStrength);
+
+        if (!rightThrustEngineParticles.isPlaying)
+        {
+            leftThrustEngineParticles.Stop();
+            rightThrustEngineParticles.Play();
+        }
+    }
+
+
+    private void RotateLeft()
+    {
+        ApplyRotation(-rotationStrength);
+
+        if (!leftThrustEngineParticles.isPlaying)
+        {
+            rightThrustEngineParticles.Stop();
+            leftThrustEngineParticles.Play();
+        }
+    }
+
+    private void StopRotating()
+    {
+        leftThrustEngineParticles.Stop();
+        rightThrustEngineParticles.Stop();
+    }
+
+    
+
 
     private void ApplyRotation(float rotationThisFrame)
     {
