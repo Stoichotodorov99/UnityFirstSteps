@@ -57,6 +57,10 @@ PrefabInstance:
       value: Finish Pad Variant
       objectReference: {fileID: 0}
     - target: {fileID: 4601683012600203068, guid: df1c798f475a3ee4d8e569ad85e04b4c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4601683012600203068, guid: df1c798f475a3ee4d8e569ad85e04b4c, type: 3}
       propertyPath: m_TagString
       value: Finish
       objectReference: {fileID: 0}
